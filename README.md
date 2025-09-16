@@ -1,1 +1,254 @@
-# comel
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surat Cinta dari Abang</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #ffe0f0, #ffc1e3);
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      perspective: 1000px;
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      background: #ff80ab;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      transition: transform 0.6s ease;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .envelope.open {
+      animation: pulse-open 0.6s ease;
+    }
+
+    @keyframes pulse-open {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: #ff4081;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform 0.6s ease;
+      z-index: 2;
+    }
+
+    .letter {
+      position: absolute;
+      top: 100px;
+      left: 10px;
+      width: 300px;
+      height: 0;
+      background: linear-gradient(135deg, #fff, #ffe0f0);
+      border-radius: 5px;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+      opacity: 0;
+      transition: all 0.8s ease;
+      font-size: 0.95em;
+      line-height: 1.5;
+      color: #333;
+      box-shadow: 0 0 30px rgba(255, 64, 129, 0.5);
+      z-index: 1;
+    }
+
+    .envelope.open .flap {
+      transform: rotateX(180deg);
+    }
+
+    .envelope.open .letter {
+      height: 180px;
+      opacity: 1;
+      animation: zoomIn 1s ease forwards;
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.9); opacity: 0; filter: blur(4px); }
+      to { transform: scale(1); opacity: 1; filter: blur(0); }
+    }
+
+    .love-button {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4081;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 1.8em;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+      transition: transform 0.3s ease;
+      z-index: 3;
+    }
+
+    .love-button:hover {
+      transform: translateX(-50%) scale(1.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) translateX(-50%); }
+      50% { transform: scale(1.3) translateX(-50%); }
+    }
+
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      font-size: 1.5em;
+      color: #ff4081;
+      animation: fall 4s linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    #youtubePlayer {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    iframe {
+      width: 0;
+      height: 0;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <div class="envelope-wrapper">
+    <div class="envelope" id="envelope">
+      <div class="flap"></div>
+      <div class="letter"><div id="isiSurat"></div></div>
+      <button class="love-button" onclick="bukaSurat()">💌</button>
+    </div>
+  </div>
+
+  <audio id="bgMusic" src="LINK_MUSIK_KAMU.mp3" loop></audio>
+
+  <div id="youtubePlayer">
+    <iframe src="https://www.youtube.com/embed/pftT6MhrtLE?autoplay=1&loop=1&playlist=pftT6MhrtLE" allow="autoplay"></iframe>
+  </div>
+
+  <script>
+    const isiSurat = [
+      "Hai sayangku,",
+      "Abang cuma mau bilang... kamu itu segalanya buat Abang.",
+      "Senyumanmu, suaramu, dan kehadiranmu adalah hadiah terindah.",
+      "Terima kasih udah jadi bagian dari hidup Abang.",
+      "Abang janji akan selalu ada, mencintai kamu sepenuh hati.",
+      "Dengan cinta,",
+      "Abang 💖"
+    ];
+
+    function bukaSurat() {
+      const envelope = document.getElementById('envelope');
+      const surat = document.getElementById('isiSurat');
+      const player = document.getElementById('youtubePlayer');
+      const music = document.getElementById('bgMusic');
+      envelope.classList.toggle('open');
+
+      if (envelope.classList.contains('open')) {
+        surat.innerHTML = '';
+        let delay = 0;
+        isiSurat.forEach((line) => {
+          const p = document.createElement('p');
+          p.style.opacity = 0;
+          surat.appendChild(p);
+          line.split('').forEach((char, i) => {
+            setTimeout(() => {
+              p.textContent += char;
+              p.style.opacity = 1;
+            }, delay + i * 30);
+          });
+          delay += line.length * 30 + 300;
+        });
+
+        player.style.display = 'block';
+
+        // Fade-in music
+        music.volume = 0;
+        music.play();
+        let vol = 0;
+        const fade = setInterval(() => {
+          if (vol < 1) {
+            vol += 0.05;
+            music.volume = vol;
+          } else {
+            clearInterval(fade);
+          }
+        }, 200);
+
+      } else {
+        surat.innerHTML = '';
+        player.style.display = 'none';
+        music.pause();
+        music.currentTime = 0;
+      }
+    }
+
+    // Hujan love terus-menerus
+    setInterval(() => {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      const hearts = ['💖', '💘', '💝', '💞'];
+      particle.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.fontSize = (Math.random() * 1.5 + 1) + 'em';
+      particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      document.getElementById('particles').appendChild(particle);
+
+      setTimeout(() => {
+        particle.remove();
+      }, 4000);
+    }, 300);
+  </script>
+
+</body>
+</html>
